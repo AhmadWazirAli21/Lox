@@ -85,7 +85,7 @@ public class Scanner {
         line++;
         break;
       case '"': string(); break;
-      case 'o': if (match('r')) addToken(TokenType.OR); break;
+      //case 'o': if (match('r')) addToken(TokenType.OR); break;
 
       default:
         if (isDigit(c)) {
@@ -117,8 +117,8 @@ public class Scanner {
     while (isAlphaNumeric(peek())) advance();
     String text = source.substring(start,current);
     TokenType type = keywords.get(text);
-    if (type == null) addToken(TokenType.IDENTIFIER , text);
-    addToken(type);
+    if (type == null) addToken(TokenType.IDENTIFIER);
+    else {addToken(type);}
   }
   private void number () {
     while (isDigit(peek())) advance();

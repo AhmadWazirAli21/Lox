@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
+  private Environment environment = new Environment();
+
   @Override
   public Object visitBinaryExpr(Expr.Binary expr) {
     Object left = evaluate(expr.left);
@@ -61,6 +63,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
     return null;
   }
+
+  @Override
+  public Object visitVariableExpr (Expr.Variable expr) {
+    return environment.get(expr.name);
+  }
+
   private Object evaluate (Expr expr) {
     return expr.accept(this);
   }
@@ -76,6 +84,23 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     System.out.println(stringify(value));
     return null;
   }
+  @Override
+  public Void visitVarStmt(Stmt.Var stmt) {
+    Object value = null;
+    if (stmt.initializer != null) {
+      value = evaluate(stmt.initializer);
+    }
+    environment.define(stmt.name.lexeme, value);
+    return null;
+  }
+
+  @Override
+  public Object visitAssignExpr (Expr.Assign expr) {
+    Object value = evaluate(expr.value);
+    environment.assign(expr.name , value);
+    return value;
+  }
+
   private boolean isTruthy (Object object) {
     if (object == null) return false;
     if (object instanceof Boolean) return (boolean) object;

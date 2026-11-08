@@ -14,14 +14,17 @@ public class GenerateAst {
     }
     String outputDir = args[0];
     defineAst (outputDir , "Expr", Arrays.asList(
+        "Assign : Token name , Expr value",
         "Binary : Expr left, com.lox.Token operator, Expr right",
         "Grouping : Expr expression",
         "Literal : Object value",
-        "Unary : com.lox.Token operator, Expr right"
+        "Unary : com.lox.Token operator, Expr right",
+        "Variable: com.lox.Token name"
     ));
     defineAst(outputDir,"Stmt",Arrays.asList(
         "Expression : Expr expression",
-        "Print : Expr expression"
+        "Print : Expr expression",
+        "Var : Token name, Expr initializer"
     ));
   }
   private static void defineAst (String outputDir , String baseName, List<String> types) throws IOException {
